@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F3F4F7"
+    android:orientation="vertical">
+
+    <com.jushi.library.customView.navigationbar.NavigationBar
+        android:id="@+id/NavigationBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F0F1F3"
+        app:backButtonIconResource="@mipmap/back_icon"
+        app:closeButtonIconResource="@mipmap/close_icon"
+        app:function="BACK_BUTTON|TITLE|LEFT_CLOSE_ICON"
+        app:isImmersiveStatusBar="true"
+        app:titleTextColor="#333333"
+        app:titleTextSize="16sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <WebView
+            android:id="@+id/webview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ProgressBar
+            android:id="@+id/webView_progress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:max="100"
+            android:progress="0"
+            android:progressDrawable="@drawable/webview_loading_progressbar" />
+
+        <TextView
+            android:id="@+id/tv_webview_reload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="点我重新加载"
+            android:padding="5dp"
+            android:textColor="#333333"
+            android:textSize="15sp"
+            android:layout_centerInParent="true"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
+
+</LinearLayout>
