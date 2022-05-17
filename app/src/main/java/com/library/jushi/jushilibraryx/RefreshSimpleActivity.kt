@@ -7,12 +7,19 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jushi.library.base.BaseFragmentActivity
+import com.jushi.library.customView.navigationbar.NavigationBar
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener
 import kotlinx.android.synthetic.main.activity_refresh_simple_layout.*
 
 class RefreshSimpleActivity : BaseFragmentActivity(), OnRefreshListener, OnLoadMoreListener {
+
+    override fun navigationBar(): Boolean = true
+
+    override fun initNavigationBar(navBar: NavigationBar) {
+        navBar.setTitleText("刷新示例")
+    }
 
     override fun getLayoutResId(): Int = R.layout.activity_refresh_simple_layout
 

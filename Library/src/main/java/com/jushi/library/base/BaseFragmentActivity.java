@@ -13,11 +13,14 @@ import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.jushi.library.R;
+import com.jushi.library.customView.navigationbar.NavigationBar;
 import com.jushi.library.customView.progressDialog.CustomProgressDialog;
 import com.jushi.library.manager.NetworkManager;
 import com.jushi.library.manager.SdManager;
@@ -30,13 +33,16 @@ import com.jushi.library.viewinject.ViewInjecter;
  * 基类activity
  */
 public abstract class BaseFragmentActivity extends BasePermissionActivity {
-
+    private View baseView;
+    private LinearLayout baseLayout;
+    private NavigationBar navigationBar;
     private CustomProgressDialog progressDialog;
     private Boolean isDestroy = false;
     protected UserManager userManager = null;
     protected NetworkManager networkManager;
     protected SdManager sdManager;
     protected Bundle savedInstanceState;
+    private boolean isFitsSystemWindows;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,7 +55,7 @@ public abstract class BaseFragmentActivity extends BasePermissionActivity {
     }
 
     private void initialize() {
-        setContentView(getLayoutResId());
+        thisSetContentView();
         ViewInjecter.inject(this);
         BaseApplication.getInstance().injectManager(this);
         getIntentData(getIntent());
@@ -59,6 +65,36 @@ public abstract class BaseFragmentActivity extends BasePermissionActivity {
         initAnimator();
     }
 
+    private void thisSetContentView() {
+        baseView = View.inflate(this, R.layout.activity_base_layout, null);
+        baseLayout = baseView.findViewById(R.id.base_layout);
+        baseLayout.addView(View.inflate(this, getLayoutResId(), null));
+        setContentView(baseView);
+        initNavigationBar();
+    }
+
+    private void initNavigationBar() {
+        navigationBar = baseView.findViewById(R.id.base_navbar);
+        navigationBar.setVisibility(navigationBar() ? View.VISIBLE : View.GONE);
+        navigationBar.enabledStatusBar(isFitsSystemWindows);
+        initNavigationBar(navigationBar);
+    }
+
+    /**
+     *
+     * @return true - 每个页面不需要自己设置导航栏 ， false - 每个页面需要自己设置
+     */
+    protected boolean navigationBar() {
+        return false;
+    }
+
+    /**
+     * 在子类根据需要初始化设置导航栏
+     * @param navBar
+     */
+    protected void initNavigationBar(NavigationBar navBar){
+
+    }
 
     @Override
     protected void onDestroy() {
@@ -147,6 +183,7 @@ public abstract class BaseFragmentActivity extends BasePermissionActivity {
      * @param statusBarTextDark      状态栏文字颜色是否为深色 true-深色模式 , false-亮色模式
      */
     public void setSystemBarStatus(boolean isFitsSystemWindows, boolean isTranslucentSystemBar, boolean statusBarTextDark) {
+        this.isFitsSystemWindows = isFitsSystemWindows;
         SystemBarUtil.setRootViewFitsSystemWindows(this, isFitsSystemWindows);
         if (isTranslucentSystemBar) { //沉浸式状态栏，设置状态栏透明
             SystemBarUtil.setTranslucentStatus(this);
